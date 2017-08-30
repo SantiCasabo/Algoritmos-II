@@ -5,19 +5,20 @@
 
 using namespace std;
 
-template <typename C>
+//template <typename C>
 class Grafos
 {
+   public:
     class Arco //hacer .cpp
     {
         public:
             Arco();
-            Arco(int adyacente, const C & costo);
+            Arco(int adyacente, int Costo);
             int devolver_adyacente() const;
-            const C & devolver_costo() const;
+            int devolver_costo() const;
         private:
             int vertice;
-            C costo;
+            int costo;
     }; //class Arco
 
 
@@ -29,21 +30,22 @@ class Grafos
         void eliminar_vertice(int vertice);
         bool existe_vertice(int vertice) const;
 
-        void agregar_arco(int origen, int destino, const C & costo);
+        void agregar_arco(int origen, int destino, int costo);
         void eliminar_arco(int origen, int destino);
         bool existe_arco(int origen, int destino) const;
-        const C & costo_arco(int origen, int destino) const;
+        int costo_arco(int origen, int destino) const;
 
         void devolver_vertices(list<int> & vertices) const;
         void devolver_adyacentes(int origen, list<Arco> & adyacentes) const;
     protected:
     private:
         struct Nodo {
-            bool Id_vertice; //cambiar.
+            int Id_vertice; //cambiar.
             list<Arco> Vecinos;
         };
+        int cargar;
         Nodo Vertices[100];
-        list<Arco<int, C> >::iterator cursor; //?
+
 };
 
 #endif // GRAFOS_H
