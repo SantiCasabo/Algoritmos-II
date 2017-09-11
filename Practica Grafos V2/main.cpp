@@ -3,11 +3,51 @@
 #include <list>
 using namespace std;
 
+void DFS(int vertice, Grafos a, int P[], int Marca[], int indice, int V[]){
+    list<Grafos::Arco> adyacentes;
+    Marca[indice] = 0;
+    a.devolver_adyacentes(vertice, adyacentes);
+    list<Grafos::Arco>::iterator it = adyacentes.begin();
+    while (it != adyacentes.end()){
+        int j=0;
+        while (V[j] != it->devolver_adyacente())
+            j++;
+        int v = V[j];
+        if (Marca[j] == -1) { //si la marca es 0, entonces hay un ciclo.
+            P[j] = vertice;
+            DFS(v, a, P, Marca, j, V);
+        }
+        it++;
+    }
+    Marca[indice] = 1;
+    cout << "vertice: " << vertice << endl;
+}
+
+void DFS_FOREST(Grafos a) {
+    list<int> vertices;
+    a.devolver_vertices(vertices);
+    int n = vertices.size();
+    int P[n], Marca[n], V[n];
+    list<int>::iterator it = vertices.begin();
+    for(int i=0; i<n; i++) {
+        V[i] = *it;
+        Marca[i] = -1;
+        P[i] = -1;
+        it++;
+    }
+    for (int i=0; i<n; i++)
+        if (Marca[i] == -1){
+            int vertice = V[i];
+            DFS(vertice, a, P, Marca, i, V);
+        }
+}
+
 void imprime_vertices (Grafos a) {
     list<int> vertices;
     a.devolver_vertices(vertices);
     for(list<int>::iterator it = vertices.begin(); it != vertices.end(); it++)
         cout << *it << endl;
+    cout << "Tamano: " << vertices.size() << endl;
 }
 
 void imprime_menu() {
@@ -41,6 +81,11 @@ int main()
     GrafoPrueba.agregar_vertice(3);
     GrafoPrueba.agregar_vertice(4);
     GrafoPrueba.agregar_vertice(5);
+    GrafoPrueba.agregar_arco(1, 2, 5);
+    GrafoPrueba.agregar_arco(1, 4, 10);
+    GrafoPrueba.agregar_arco(2, 3, 7);
+    GrafoPrueba.agregar_arco(5, 3, 2);
+    DFS_FOREST(GrafoPrueba);
     imprime_menu();
     cin >> opcion;
     while (opcion != 0){
